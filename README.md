@@ -1,5 +1,6 @@
-<<<<<<< HEAD
-# num_1_test
+# SmartHome-Control-App
+
+Smart Home management app demo – UI simulation only, no real devices, no real datas.
 
 A new Flutter project.
 
@@ -77,7 +78,3 @@ Với:
 | `config`  | Cấu hình môi trường, endpoint                    | Toàn app                |
 | `utils`   | Các hàm hỗ trợ chung                             | Toàn app                |
 | `routing` | Điều hướng giữa các trang                        | Toàn app                |
-=======
-# SmartHome-Control-App
-Smart Home management app demo – UI simulation only, no real devices, no real datas.
->>>>>>> ee7a0be29f1835646ffbab5966b29b7e00e16348
