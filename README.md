@@ -1,80 +1,133 @@
 # SmartHome-Control-App
 
-Smart Home management app demo – UI simulation only, no real devices, no real datas.
+## MỤC LỤC
 
-A new Flutter project.
+- [1. Mô tả dự án](#1-mô-tả-dự-án)
+- [2. Chức năng](#2-chức-năng)
+  - [2.1. Chức năng chính](#21-chức-năng-chính)
+  - [2.2. Chức năng phụ](#22-chức-năng-phụ)
+  - [2.3. Chưa triển khai](#23-chưa-triển-khai)
+- [3. Công nghệ sử dụng](#3-công-nghệ-sử-dụng)
+- [4. Cấu trúc thư mục trong lib](#4-cấu-trúc-thư-mục-trong-lib)
+- [5. Luồng hoạt động của ứng dụng](#5-luồng-hoạt-động-của-ứng-dụng)
+- [6. Cài đặt & Chạy project](#6-cài-đặt--chạy-project)
+- [7. Các hạn chế](#7-các-hạn-chế)
 
-## Getting Started
+## 1. Mô tả dự án
 
-This project is a starting point for a Flutter application.
+Đây là một ứng dụng Flutter demo dùng để quản lý và điều khiển thiết bị điện trong các phòng của một ngôi nhà thông minh.
 
-A few resources to get you started if this is your first Flutter project:
+Ứng dụng mô phỏng việc điều khiển thiết bị thông qua giao thức MQTT (publish / subscribe).
+Ngoài ra, app có sử dụng Local Storage để lưu thông tin người dùng và dữ liệu phòng đã tạo.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+> Lưu ý:
+> Đây chỉ là demo app, không kết nối với phần cứng thật, không có dữ liệu thiết bị thực tế.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 2. Chức năng
 
-## Cấu trúc thư mục mẫu
+### 2.1. Chức năng chính
+
+- Đăng nhập người dùng (không có backend server)
+- Hiển thị danh sách các phòng
+- Điều khiển trạng thái thiết bị trong phòng (mô phỏng)
+- Kết nối MQTT để:
+  - Gửi lệnh (publish)
+  - Nhận dữ liệu (subscribe)
+- Lưu trạng thái ứng dụng bằng Local Storage
+
+### 2.2. Chức năng phụ
+
+- Thêm phòng mới
+- Xóa phòng
+- Hiển thị trạng thái cảm biến / thiết bị theo phòng
+
+### 2.3. Chưa triển khai
+
+- Thêm phòng mới
+- Xóa phòng
+- Hiển thị trạng thái cảm biến / thiết bị theo phòng
+- Cảnh báo khi vượt ngưỡng an toàn
+
+## 3. Công nghệ sử dụng
+
+- **Flutter & Dart**
+- **MQTT** (sử dụng package mqtt_client)
+- **Provider** cho quản lý state
+- **SharedPreferences** cho Local Storage
+- UI xây dựng bằng widget Flutter (Material Design)
+
+## 4. Cấu trúc thư mục trong `lib/`
 
 ```sh
-lib
-├─── config                               # Chứa các cấu hình toàn cục cho ứng dụng
-├─┬─ data                                 # Tầng dữ liệu (Data Layer) chịu trách nhiệm lấy, lưu và xử lý dữ liệu thực tế (từ API, database, local storage, MQTT, v.v.)
-│ ├─┬─ model                              # Chứa các model dữ liệu thô được map trực tiếp từ nguồn (ví dụ JSON từ API)
-│ │ └─── <api model class>.dart
-│ ├─┬─ repositories                       # Là lớp trung gian giữa ViewModel và Service. Đóng vai trò tổng hợp dữ liệu từ nhiều nguồn (API, cache, local database…). Che giấu chi tiết cách dữ liệu được lấy ra.
-│ │ └─── <repository class>.dart
-│ └─┬─ services                           # Là lớp làm việc trực tiếp với nguồn dữ liệu thực tế.
-│   └─── <service class>.dart
-├─┬─ domain                               # Tầng nghiệp vụ (Business / Entities Layer). Mục đích: gom các mô hình dữ liệu (model) mà cả UI và Data đều dùng chung
-│ └─┬─ models                             # các model API (data từ mạng)
-│   └─── <model name>.dart
-├─── routing                              # Chứa logic điều hướng giữa các màn hình (navigation).
-├─┬─ ui                                   # Presentation Layer (tầng giao diện người dùng), nơi xử lý UI và state logic
-│ ├─┬─ core                               # Chứa các phần dùng chung giữa nhiều màn hình (nhiều feature)
-│ │ ├─── themes                           # theme, style chung (màu sắc, typography, style app, ...)
-│ │ └─┬─ ui                               # các widget tái sử dụng
-│ │   └─── <shared_widgets>
-│ └─┬─ <FEATURE_NAME>                     # Chứa mỗi tính năng (feature) của app => có thư mục riêng để dễ quản lý
-│   ├─┬─ view_model                       # Chứa logic xử lý và quản lý state cho feature đó.
-│   │ └─── <view_model class>.dart
-│   └─┬─ widgets                          # Chứa các widget UI của feature đó như:
-│     ├── <feature name>_screen.dart      # - giao diện chính
-│     └── <other widgets>                 # - các widgets con nhỏ hơn
-├─── utils                                # Chứa các hàm tiện ích hoặc lớp helper được dùng chung trong toàn bộ app
-├─── main_development.dart
-├─── main_staging.dart
-└─── main.dart
-
-# The test folder contains unit and widget tests
-test
-├─── data
-├─── domain
-├─── ui
-└─── utils
-
-# The testing folder contains mocks other classes need to execute tests
-testing
-├─── fakes
-└─── models
+lib/
+ ├ models/                  # Model dữ liệu (Room, User)
+ ├ mqtt/                    # Cấu hình & service MQTT
+ ├ routing/                 # Điều hướng (routes)
+ ├ state/                   # Quản lý state (Provider)
+ ├ ui/                      # Các màn hình UI
+ ├ main.dart                # Entry point
+ └ my_app.dart              # Cấu hình MaterialApp
 ```
 
 Với:
 
-- Folder `ui` chia theo feature, chứa `view_model` và `widgets`.
-- Folder `data` chứa repository, service, và các lớp model dùng cho API.
-- `domain` chứa các kiểu dữ liệu dùng chung (models) mà cả data layer và ui layer đều dùng.
-- Ngoài ra, ứng dụng có 3 điểm vào `main` khác nhau cho môi trường: production, development, staging.
-- Về test: thư mục `test/` có cấu trúc tương ứng với `lib/`. Có thêm thư mục `testing/` chứa mocks, fake classes phục vụ test.
+- `models/`: Định nghĩa dữ liệu phòng và người dùng
+- `mqtt/`: Xử lý kết nối, publish / subscribe MQTT
+- `state/`: Lưu và quản lý trạng thái phòng, user, MQTT
+- `ui/`: Các màn hình (login, home, room, config, …)
+- `routing/`: Quản lý điều hướng trong app
 
-| Tầng      | Mục đích                                         | Kết nối với             |
-| --------- | ------------------------------------------------ | ----------------------- |
-| `ui`      | Hiển thị giao diện và xử lý tương tác người dùng | ViewModel               |
-| `domain`  | Chứa mô hình nghiệp vụ, thuần dữ liệu            | Repository và ViewModel |
-| `data`    | Quản lý truy cập dữ liệu (API, DB, Firebase)     | Repository gọi Service  |
-| `config`  | Cấu hình môi trường, endpoint                    | Toàn app                |
-| `utils`   | Các hàm hỗ trợ chung                             | Toàn app                |
-| `routing` | Điều hướng giữa các trang                        | Toàn app                |
+## 5. Luồng hoạt động của ứng dụng
+
+1. Khởi động app (main.dart)
+   - Khởi tạo MQTT
+   - Load dữ liệu từ Local Storage
+   - Setup Provider cho state management
+
+2. Màn hình đăng nhập
+   - Người dùng nhập username / password
+   - Kiểm tra dữ liệu trong Local Storage
+
+3. Màn hình Home
+   - Hiển thị danh sách các phòng
+   - Người dùng chọn phòng để điều khiển
+
+4. Màn hình chi tiết phòng
+   - Hiển thị thiết bị trong phòng
+   - Gửi lệnh điều khiển qua MQTT
+   - Nhận dữ liệu trạng thái qua MQTT topic
+
+5. Lưu dữ liệu
+   - Danh sách phòng và user được lưu bằng SharedPreferences
+   - Tải lại khi app mở lần sau
+
+## 6. Cài đặt & Chạy project
+
+**Bước 1: Clone repository**
+
+```sh
+git clone https://github.com/HTKFOOLISH/SmartHome-Control-App.git
+cd SmartHome-Control-App
+```
+
+**Bước 2: Cài dependencies**
+
+```sh
+flutter pub get
+```
+
+**Bước 3: Chạy ứng dụng**
+
+```sh
+flutter run
+```
+
+> Hoặc bạn có thể xem hướng dẫn chạy demo dành cho người mới tại đây: 👉 [GUIDELINE.md](GUIDELINE.md)
+
+## 7. Các hạn chế
+
+- Chỉ là ứng dụng demo
+- Tài khoản người dùng lưu cục bộ, không mã hóa
+- MQTT config được viết trực tiếp trong code
+- Không có xác thực bảo mật
+- Không hỗ trợ nhiều người dùng với quyền khác nhau
